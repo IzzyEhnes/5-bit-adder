@@ -40,3 +40,18 @@ module TestMod;
         #1;
     end
 endmodule
+
+
+
+module BigAdder(X, Y, S, C5);
+    input [4:0] X, Y;   // two 5-bit input items
+    output [4:0] S;
+    output C5;
+    wire [3:0] C;
+
+    FullAdderMod(X[0], Y[0], S[0], 0,    C[0]);
+    FullAdderMod(X[1], Y[1], S[1], C[0], C[1]);
+    FullAdderMod(X[2], Y[2], S[2], C[1], C[2]);
+    FullAdderMod(X[3], Y[3], S[3], C[2], C[3]);
+    FullAdderMod(X[4], Y[4], S[4], C[3], C[4]);
+endmodule
