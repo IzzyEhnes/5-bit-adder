@@ -1,12 +1,18 @@
+// Izzy Ehnes
+// addder.v, simulated 5-bit adder, 137 Verilog Programming Assignment
+// Version: Icarus Verilog v. 11.0
+// Compile: $ iverilog -o adder adder.v
+// Run: $ vvp adder
+
 module TestMod;
-    parameter STDIN = 32'h8000_0000;
+    parameter STDIN = 32'h8000_0000; // I/O address of keyboard input channel
 
     reg [7:0] str [1:3]; // typing in 2 chars at a time (decimal # and Enter key)
     reg [4:0] X, Y;      // 5-bit X, Y to sum
     wire [4:0] S;        // 5-bit Sum to see as result
     wire C5;             // like to know this as well from result of adder
 
-    BigAdder BA(X, Y, S, C5); 
+    BigAdder BA(X, Y, S, C5); // Instantiate BigAdder module
 
     initial begin
         $display("Time    X             Y             S          C5");
@@ -43,21 +49,25 @@ module TestMod;
     end
 endmodule
 
+
+
 module BigAdder(X, Y, S, C5);
-    input [4:0] X, Y;   // two 5-bit input items
+    input [4:0] X, Y; // two 5-bit input items
     
-    output [4:0] S;
+    output [4:0] S; // the sum of X and Y
     output C5;
     
     wire C0 = 0;
     wire C1, C2, C3, C4;
 
-    FullAdderMod FA1(X[0], Y[0], S[0], C0, C1);
-    FullAdderMod FA2(X[1], Y[1], S[1], C1, C2);
-    FullAdderMod FA3(X[2], Y[2], S[2], C2, C3);
-    FullAdderMod FA4(X[3], Y[3], S[3], C3, C4);
-    FullAdderMod FA5(X[4], Y[4], S[4], C4, C5);
+    FullAdderMod FAM1(X[0], Y[0], S[0], C0, C1);
+    FullAdderMod FAM2(X[1], Y[1], S[1], C1, C2);
+    FullAdderMod FAM3(X[2], Y[2], S[2], C2, C3);
+    FullAdderMod FAM4(X[3], Y[3], S[3], C3, C4);
+    FullAdderMod FAM5(X[4], Y[4], S[4], C4, C5);
 endmodule
+
+
 
 module FullAdderMod(X, Y, S, Ci, Co);
     input X, Y, Ci;
