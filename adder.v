@@ -6,12 +6,12 @@ module TestMod;
     wire [4:0] S;        // 5-bit Sum to see as result
     wire C5;             // like to know this as well from result of adder
 
-    //BigAdder(X, Y, S, C5);
+    BigAdder BA(X, Y, S, C5); 
 
     initial begin
         $display("Time    X             Y             S          C5");
-        $display("-------------------------------------------------");
-        $monitor("%0d      %d(%b)     %d(%b)     %b", $time, X, X, Y, Y, S, S, C5);
+        $display("------------------------------------------------------");
+        $monitor("%0d      %d(%b)     %d(%b)     %d(%b)   %d", $time, X, X, Y, Y, S, S, C5);
     end
    
     initial begin
@@ -38,20 +38,31 @@ module TestMod;
         X = 31'b11111;
         Y = 31'b11111;
         #1;
+
+        $display("Done");
     end
 endmodule
 
-
-
 module BigAdder(X, Y, S, C5);
     input [4:0] X, Y;   // two 5-bit input items
+    
     output [4:0] S;
     output C5;
-    wire [3:0] C;
+    
+    wire C0 = 0;
+    wire C1, C2, C3, C4;
 
-    FullAdderMod(X[0], Y[0], S[0], 0,    C[0]);
-    FullAdderMod(X[1], Y[1], S[1], C[0], C[1]);
-    FullAdderMod(X[2], Y[2], S[2], C[1], C[2]);
-    FullAdderMod(X[3], Y[3], S[3], C[2], C[3]);
-    FullAdderMod(X[4], Y[4], S[4], C[3], C[4]);
+    FullAdderMod FA1(X[0], Y[0], S[0], C0, C1);
+    FullAdderMod FA2(X[1], Y[1], S[1], C1, C2);
+    FullAdderMod FA3(X[2], Y[2], S[2], C2, C3);
+    FullAdderMod FA4(X[3], Y[3], S[3], C3, C4);
+    FullAdderMod FA5(X[4], Y[4], S[4], C4, C5);
+endmodule
+
+module FullAdderMod(X, Y, S, Ci, Co);
+    input X, Y, Ci;
+    output wire S, Co;
+
+    assign S = (X ^ Y) ^ Ci;
+    assign Co = (X & Y) | (Ci & (X ^ Y));
 endmodule
